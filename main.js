@@ -188,7 +188,7 @@ function updateTower(e) {
 			let tx = target.x;
 			let ty = target.y;
 
-			for (let i = 0; i < 1 ; ++i) {
+			for (let i = 0; i < 5 ; ++i) {
 				const d = distance(e.x, e.y, tx, ty);
 				const timeToHit = d / BULLET_STEP_SIZE;
 				const ntx = target.x + target.vx *  timeToHit;
