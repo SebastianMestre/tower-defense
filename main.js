@@ -6,6 +6,7 @@ const context = canvas.getContext("2d");
 const BULLET_RADIUS = 2;
 const BULLET_STEP_SIZE = 1.6;
 const BULLET_ENEMY_DISTANCE = 6;
+const BULLET_LIFE = 100;
 
 const TOWER_RADIUS = 7;
 const TOWER_COST = 100;
@@ -14,7 +15,7 @@ const ENEMY_STEP_SIZE = 0.6;
 const ENEMY_RADIUS = 4;
 const ENEMY_WAYPOINT_DISTANCE = 10;
 
-const STARTING_MONEY = 100;
+const STARTING_MONEY = 200;
 const STARTING_LIFE = 50;
 const STARTING_DIFFICULTY = 1;
 
@@ -98,7 +99,8 @@ function makeWave(difficulty) {
 
 function drawPath() {
 	context.beginPath();
-	context.lineWidth = 5;
+	context.lineWidth = 20;
+	context.strokeStyle = '#555';
 	const start = waypoints[0];
 	context.moveTo(start.x, start.y);
 	for (let i = 1; i < waypoints.length; ++i) {
@@ -125,7 +127,7 @@ function boss(x, y) {
 	return e;
 }
 function tower(x, y) { return {x, y, cooldown: 0}; }
-function bullet(x, y, vx, vy) { return {x, y, vx, vy, life: 230}; }
+function bullet(x, y, vx, vy) { return {x, y, vx, vy, life: BULLET_LIFE}; }
 
 
 
@@ -196,6 +198,10 @@ function updateTower(e) {
 
 				tx = ntx;
 				ty = nty;
+			}
+
+			if (distance(e.x, e.y, tx, ty) > BULLET_LIFE * BULLET_STEP_SIZE) {
+				return;
 			}
 
 			const [vx, vy] = straightShot(e.x, e.y, tx, ty);
@@ -282,19 +288,19 @@ function drawGame() {
 		switch (enemy.tag) {
 			case 'normal':
 				// performance loss
-				context.fillStyle = '#d33';
+				context.fillStyle = '#a51';
 				drawSquare(enemy.x, enemy.y, ENEMY_RADIUS);
 				break;
 
 			case 'miniboss':
 				// performance loss
-				context.fillStyle = '#e15';
+				context.fillStyle = '#d33';
 				drawSquare(enemy.x, enemy.y, ENEMY_RADIUS * 2);
 				break;
 		
 			case 'boss':
 				// performance loss
-				context.fillStyle = '#f00';
+				context.fillStyle = '#e15';
 				drawSquare(enemy.x, enemy.y, ENEMY_RADIUS * 5);
 				break;
 		}
